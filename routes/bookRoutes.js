@@ -7,4 +7,7 @@ router.route('/').get(bookController.getAllBooks);
 
 router.route('/:id').get(bookController.getOneBook);
 
+router.route('/:id/authors').get(bookController.getAuthorsByBook);
+router.route('/:id/genres').get(bookController.getGenresByBook);
+
 module.exports = router;

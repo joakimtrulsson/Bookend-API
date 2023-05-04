@@ -9,6 +9,7 @@ const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const bookRouter = require('./routes/bookRoutes');
 const authorRouter = require('./routes/authorRoutes');
+const genreRouter = require('./routes/genreRoutes');
 
 const app = express();
 
@@ -50,6 +51,7 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/book', bookRouter);
 app.use('/api/author', authorRouter);
+app.use('/api/genre', genreRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl}!`, 404));
