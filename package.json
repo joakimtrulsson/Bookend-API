@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js",
-    "start:prod": "NODE_ENV=production nodemon server.js"
+    "dev": "npx nodemon server.js",
+    "prod": "NODE_ENV=production nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,8 @@
     "helmet": "^6.1.5",
     "hpp": "^0.2.3",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.22"
+    "mysql2": "^3.2.4",
+    "nodemon": "^2.0.22",
+    "xss-clean": "^0.1.1"
   }
 }
