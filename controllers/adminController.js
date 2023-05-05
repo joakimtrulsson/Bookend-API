@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const { promisify } = require('util');
 
 dotenv.config({ path: './config/.env' });
 
 const catchAsync = require('../utils/catchAsync.js');
 
-const { createUser, login } = require('../models/userModel.js');
+const { createUser, login, checkIfUserExists } = require('../models/userModel.js');
 const AppError = require('../utils/appError.js');
 
 const signToken = (id) => {
@@ -62,4 +63,38 @@ exports.signinUser = catchAsync(async (req, res, next) => {
   }
 
   createSendToken(result, 200, req, res);
+});
+
+exports.isLoggedIn = catchAsync(async (req, res, next) => {
+  let token;
+
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    token = req.headers.authorization.replace('Bearer', '').replace(' ', '');
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
+  }
+
+  if (!token) {
+    return next(new AppError('You are not logged in.', 401));
+  }
+  // Validera token.
+  const decoded = await promisify(jwt.verify)(token, process.env.TOKEN_SECRET);
+
+  const freshUser = await checkIfUserExists(decoded.id);
+  if (!freshUser) {
+    return next(new AppError('The user belonging to the token does not longer exist.', 401));
+  }
+
+  req.user = freshUser;
+
+  next();
+});
+
+exports.test = catchAsync(async (req, res, next) => {
+  res.status(200).json({
+    status: 'success',
+    data: {
+      message: 'Du är inne!',
+    },
+  });
 });

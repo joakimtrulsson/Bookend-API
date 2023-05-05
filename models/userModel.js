@@ -71,3 +71,11 @@ exports.login = async (username, password) => {
     // dbConnection.end();
   }
 };
+
+exports.checkIfUserExists = async (id) => {
+  console.log(id);
+  console.log('här');
+  const [rows] = await dbConnection.execute('SELECT * FROM users WHERE id = ?', [id]);
+  const freshUser = rows[0];
+  return freshUser;
+};
