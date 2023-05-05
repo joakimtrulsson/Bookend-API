@@ -1,3 +1,5 @@
+const axios = require('axios');
+
 const dbConnection = require('../config/db.js');
 
 exports.getBooks = async () => {
@@ -17,6 +19,14 @@ exports.getBook = async (id) => {
   );
 
   return rows[0];
+};
+
+exports.getBookCover = async (isbn) => {
+  const coverUrl = `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg`;
+
+  const response = await axios.get(coverUrl, { responseType: 'arraybuffer' });
+
+  return response.config.url;
 };
 
 exports.getAuthors = async (id) => {
