@@ -10,6 +10,8 @@ const globalErrorHandler = require('./controllers/errorController');
 const bookRouter = require('./routes/bookRoutes');
 const authorRouter = require('./routes/authorRoutes');
 const genreRouter = require('./routes/genreRoutes');
+const adminRouter = require('./routes/adminRoutes');
+const { createTable } = require('./models/userModel');
 
 const app = express();
 
@@ -48,10 +50,13 @@ app.use((req, res, next) => {
   next();
 });
 
+createTable();
+
 // Routes
 app.use('/api/book', bookRouter);
 app.use('/api/author', authorRouter);
 app.use('/api/genre', genreRouter);
+app.use('/api/admin', adminRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl}!`, 404));
